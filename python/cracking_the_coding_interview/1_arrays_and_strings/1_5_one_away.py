@@ -26,7 +26,7 @@ def edit_distance(a: str, b: str, m: int, n: int) -> int:
     # abc|d, abe|d: uh-oh, c != e
     # insert: abc|ed,  ab|ed
     # remove:  ab|d,  abe|d
-    # replace: ab|ed,  ab|ed 
+    # replace: ab|ed,  ab|ed
     if a[m - 1] != b[n - 1]:
         return 1 + min(edit_distance(a, b, m, n - 1),      # insert char into a
                        edit_distance(a, b, m - 1, n),      # remove char from a
