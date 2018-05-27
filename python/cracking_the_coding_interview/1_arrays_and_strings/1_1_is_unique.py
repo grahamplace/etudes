@@ -1,5 +1,5 @@
-# 1.1
-# Is Unique: Implement an algorithm to determine if a string has all unique characters.
+# 1.1 Is Unique
+# Implement an algorithm to determine if a string has all unique characters.
 def is_unique(s):
     seen_chars = []
     for c in list(s):
