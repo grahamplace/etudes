@@ -2,8 +2,9 @@ from hash_table import MyHashTable
 
 def test_building():
     h = MyHashTable(5)
-    assert type(h) == MyHashTable
     assert h.table_length == 5
+    assert len(h.table) == 5
+    assert h.table[0] == []
 
 
 def test_insert_and_get():
