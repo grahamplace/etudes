@@ -1,4 +1,5 @@
 from hash_table import MyHashTable
+import random
 
 def test_building():
     h = MyHashTable(5)
@@ -8,9 +9,14 @@ def test_building():
 
 
 def test_insert_and_get():
-    h = MyHashTable(5)
-    h.insert('abc', 123)
-    assert h.get('abc') == 123
+    d = {}
+    h = MyHashTable(100)
+    for i in range(1000):
+        d[i] = random.randint(0, 1000)
+        h.insert(i, d[i])
+
+    for i in range(1000): assert h.get(i) == d[i]
+
 
 
 def test_find():
@@ -40,17 +46,36 @@ def test_remove():
     assert not h.find('test key')
 
 
-def test_to_string():
+def test_visual():
     h = MyHashTable(5)
+    print(f"Making a new hash table of length: {h.table_length}...")
+    print("Current state of hash table:")
+    print(h.to_string())
+    print("Inserting ('abc', 123)...")
     h.insert('abc', 123)
+    print("Inserting ('123', 0)...")
     h.insert('123', 0)
+    print("Inserting ('testing', 42)...")
     h.insert('testing', 42)
-    assert h.to_string() == "[('testing', 42)]\n[]\n[('abc', 123), ('123', 0)]\n[]\n[]\n"
+    print("Inserting ('yet another key', 999)...")
+    h.insert('yet another key', 999)
+    print("Inserting ('foo', 123)...")
+    h.insert('foo', 123)
+    print("Inserting ('bar', 123)...")
+    h.insert('bar', 123)
+    print("Inserting ('baz', 123)...")
+    h.insert('baz', 123)
+    print("Current state of hash table:")
+    print(h.to_string())
 
 
 def run_tests():
     test_building()
     test_insert_and_get()
+    test_find()
+    test_update()
+    test_remove()
+    test_visual()
 
 
 if __name__ == '__main__':

@@ -60,7 +60,8 @@ class MyHashTable(object):
 
         for t in self.table[index]:
             if t[0] == key:
-                t[1] = value
+                self.table[index].remove(t)
+                self.table[index].append((key, new_value))
                 return
 
         assert False, "Key not present in hash table; try insert(key, value) instead."
@@ -73,6 +74,7 @@ class MyHashTable(object):
         for t in self.table[index]:
             if t[0] == key:
                 self.table[index].remove(t)
+                return
 
         assert False, "Key not present in hash table; could not delete"
 
