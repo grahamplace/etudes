@@ -50,7 +50,6 @@ class MyHashTable(object):
         for t in self.table[index]:
             assert t[0] != key, "Key already present in hash table; try update(key, value) instead."
 
-
         self.table[index].append((key, value))
 
 
