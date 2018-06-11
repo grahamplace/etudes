@@ -46,6 +46,23 @@ class LinkedList(object):
                 curr = curr.next
 
 
+    # Follow up: remove dupes with no buffer
+    # O(1) space, yay
+    # O(n^2) time, boo
+    def remove_dupes_no_buffer(self):
+        if self.length <= 1: return
+
+        curr = self.head
+        while curr:
+            curr2 = curr
+            while curr2.next:
+                if curr2.next.data == curr.data:
+                    curr2.next = curr2.next.next
+                else:
+                    curr2 = curr2.next
+            curr = curr.next
+
+
     def to_string(self):
         list_str = ""
         curr = self.head
@@ -81,10 +98,26 @@ if __name__ == '__main__':
     assert my_list.num_occurrences(Node(1)) == 4
     assert my_list.num_occurrences(Node(0)) == 0
 
-    print(my_list.to_string())
-
     my_list.remove_dupes()
-    print(my_list.to_string())
+
+    assert my_list.num_occurrences(Node(3)) == 1
+    assert my_list.num_occurrences(Node(2)) == 1
+    assert my_list.num_occurrences(Node(1)) == 1
+    assert my_list.num_occurrences(Node(0)) == 0
+
+
+    # Do it all again, but with no buffer version
+    my_list = LinkedList()
+
+    my_list.append_to_tail(Node(1))
+    my_list.append_to_tail(Node(2))
+    my_list.append_to_tail(Node(2))
+    my_list.append_to_tail(Node(1))
+    my_list.append_to_tail(Node(1))
+    my_list.append_to_tail(Node(3))
+    my_list.append_to_tail(Node(1))
+
+    my_list.remove_dupes_no_buffer()
 
     assert my_list.num_occurrences(Node(3)) == 1
     assert my_list.num_occurrences(Node(2)) == 1
