@@ -24,16 +24,13 @@ class Conway:
         n = self.get_neighbors(cell)
 
         # Any live cell with fewer than two live neighbors dies, as if by underpopulation.
-        if len(n) < 2:
+        # Any live cell with more than three live neighbors dies, as if by overpopulation.
+        if len(n) < 2 or len(n) > 3:
             pass
 
         # Any live cell with two or three live neighbors lives on to the next generation.
         if len(n) in [2, 3]:
             next_gen.append(cell)
-
-        # Any live cell with more than three live neighbors dies, as if by overpopulation.
-        if len(n) > 3:
-            pass
 
         # Any dead cell with exactly three live neighbors becomes a live cell, as if by reproduction.
         # Any one of the neighboring positions of our currently considered live cell is a candidate for reproduction
