@@ -170,7 +170,6 @@ def keyPressed():
     global board_is_locked, LIVE_COLOR_TUPLE
 
     if key == CODED:
-        print('coded key pressed')
         if keyCode == UP:
             frameRate(frameRate + 2)
         elif keyCode == DOWN:
