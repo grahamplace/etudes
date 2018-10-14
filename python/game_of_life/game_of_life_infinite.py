@@ -1,4 +1,4 @@
-from random import random
+from random import random, randint
 
 class Conway:
     def __init__(self, initial_cells, board_size):
@@ -9,6 +9,7 @@ class Conway:
 
     def run_iteration(self):
         next_gen = {}
+
         for cell in self.cells:
             new_cells = self.evolve(cell)
             for cell in new_cells:
@@ -60,7 +61,7 @@ class Conway:
 
 def setup_game(board_size, rand_init=False):
     # single blinker
-    # initial_cells = {(2,1): True, (2,2): True, (2,3): True}
+    initial_cells = {(2,1): True, (2,2): True, (2,3): True}
 
     # single blinker - on edge to test sphere board
     # initial_cells = {(0,1): True, (0,2): True, (0,3): True}
@@ -76,39 +77,45 @@ def setup_game(board_size, rand_init=False):
     #                  (1,2): True, (2,2): True}
 
     # a whole mess of things
-    initial_cells = {
-        # glider 1
-        (1,0): True, (2,1): True, (0,2): True,(1,2): True, (2,2): True,
-
-        # blinker 2
-        (10,5): True, (10,6): True, (10,7): True, (10,8): True
-    }
+    # initial_cells = {
+    #     # glider 1
+    #     (1,0): True, (2,1): True, (0,2): True,(1,2): True, (2,2): True,
+    #
+    #     # blinker 2
+    #     (10,5): True, (10,6): True, (10,7): True, (10,8): True
+    # }
 
     if rand_init:
-        for i in range(0, board_size):
-            for j in range(0, board_size):
-                if random() > 0.5:
-                    initial_cells[(i,j)] = True
+        initial_cells = get_random_cells(board_size)
 
     return Conway(initial_cells, board_size)
+
+
+def get_random_cells(board_size):
+    initial_cells = {}
+    for i in range(0, board_size):
+        for j in range(0, board_size):
+            if random() > 0.5:
+                initial_cells[(i,j)] = True
+    return initial_cells
 
 # config things here, always use variables below
 CELL_SIZE = 8
 CELL_COUNT = 100
-background_color = 0
+BACKGROUND_COLOR = 0
 LIGHT_GREY = 105
 LIVE_COLOR_TUPLE = (50, 205, 50)
 LOCKED_LIVE_COLOR_TUPLE = (165, 242, 243)
-FRAME_RATE = 30
+FRAME_RATE = 25
 THICK = 2
 THIN = 1
 board_is_locked = False
 pause_if_locked = False
-game = setup_game(CELL_COUNT, False)
+game = setup_game(CELL_COUNT, True)
 
 
 def draw_board():
-    stroke(LIGHT_GREY)
+    stroke(BACKGROUND_COLOR)
     strokeWeight(THICK)
     for i in range(CELL_COUNT):
         for j in range(CELL_COUNT):
@@ -117,7 +124,7 @@ def draw_board():
 
 
 def draw_cells(cells, board_is_locked):
-    stroke(LIGHT_GREY)
+    stroke(BACKGROUND_COLOR)
     strokeWeight(THICK)
     if board_is_locked:
         fill(*LOCKED_LIVE_COLOR_TUPLE)
@@ -132,13 +139,13 @@ def draw_cells(cells, board_is_locked):
 def setup():
     frameRate(FRAME_RATE)
     size(CELL_SIZE * CELL_COUNT, CELL_SIZE * CELL_COUNT)
-    background(background_color)
+    background(BACKGROUND_COLOR)
     reset_colors()
 
 
 def reset_colors():
-    stroke(background_color)
-    fill(background_color)
+    stroke(BACKGROUND_COLOR)
+    fill(BACKGROUND_COLOR)
     strokeWeight(THIN)
 
 
@@ -150,3 +157,31 @@ def draw():
     if not board_is_locked:
         game.run_iteration()
         board_is_locked = game.is_locked and pause_if_locked
+
+
+def mouseDragged():
+    game.cells[(mouseX / CELL_SIZE, mouseY / CELL_SIZE)] = True
+
+
+def mousePressed():
+    game.cells[(mouseX / CELL_SIZE, mouseY / CELL_SIZE)] = True
+
+def keyPressed():
+    global board_is_locked, LIVE_COLOR_TUPLE
+
+    if key == CODED:
+        print('coded key pressed')
+        if keyCode == UP:
+            frameRate(frameRate + 2)
+        elif keyCode == DOWN:
+            frameRate(frameRate - 2)
+    elif key in [' ', '\n']:
+        board_is_locked = not board_is_locked
+    elif key == 'q':
+        quit()
+    elif key in ['r', 'i']:
+        game.cells = get_random_cells(CELL_COUNT)
+    elif key == 'd':
+        game.cells = {}
+    elif key == 'c':
+        LIVE_COLOR_TUPLE = (randint(0, 255), randint(0, 255), randint(0, 255))
